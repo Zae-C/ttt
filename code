@@ -1,0 +1,86 @@
+#include<iostream>
+#include "SFML/Graphics.hpp"
+
+using namespace std;
+
+int main() {
+
+	sf::RenderWindow screen(sf::VideoMode(1200, 900), "breakout"); //set up screen
+	sf::Event event; //set up event queue
+	sf::Clock clock; //set up the clock (needed for game timing)
+	const float FPS = 60.0f; //FPS
+	screen.setFramerateLimit(FPS); //set FPS
+
+	sf::Texture back;
+	back.loadFromFile("white2.png");
+	sf::Sprite ground;
+	ground.setTexture(back);
+
+    sf::Texture xs;
+    xs.loadFromFile("green.png");
+    sf::Sprite player;
+    player.setTexture(xs);
+
+    sf::Texture os;
+    os.loadFromFile("blrp (1).png");
+    sf::Sprite ai;
+    ai.setTexture(os);
+
+	int board[9][12] = {
+		0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,
+        1,1,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,
+	};
+
+	int rows = 0;
+	int cols = 0;
+    bool turn = true;
+    bool mouse = false;
+
+    while (screen.isOpen()) {//keep window open until user shuts it down
+        while (screen.pollEvent(event)) { //look for events-----------------------
+
+            //this checks if the user has clicked the little "x" button in the top right corner
+            if (event.type == sf::Event::EventType::Closed)
+                screen.close();
+            //KEYBOARD INPUT 
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                mouse = true;
+                cout << "CLICK!" << endl;
+            }
+            else mouse = false;
+        }
+
+        //while (turn == true) {
+          //  if (mouse == true)
+       //}
+        //render section-----------------------------------------
+        screen.clear(); //wipes screen, without this things smear
+        for (int rows = 0; rows < 9; rows++)
+            for (int cols = 0; cols < 12; cols++) {
+                if (board[rows][cols] == -1) {
+                    player.setPosition(cols * 100, rows * 100);
+                    screen.draw(player);
+                }
+                if (board[rows][cols] == 0) {
+                    ground.setPosition(cols * 100, rows * 100);
+                    screen.draw(ground);
+                }
+                if (board[rows][cols] == 1) {
+                    ai.setPosition(cols * 100, rows * 100);
+                    screen.draw(ai);
+                }
+            }
+        screen.display(); //flips memory drawings onto screen
+
+    }//######################## end game loop ###################################################################################
+
+
+
+}
